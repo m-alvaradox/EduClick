@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educlick - Login</title>
+    <link rel="stylesheet" href="css/estilo.css">
+    <link rel="icon" href="educlick.png" type="image/x-icon">
+        <link rel="manifest" href="manifest.json">
+    <script src="js/sw-register.js"></script>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Educlick</h1>
+        <input type="text" id="usuario" placeholder="Usuario" required>
+        <input type="password" id="clave" placeholder="Contraseña" required>
+        <button onclick="login()">Entrar</button>
+        <p id="mensaje-error" style="color:red;"></p>
+    </div>
+    <script>
+        function login() {
+            const usuario = document.getElementById('usuario').value;
+            const clave = document.getElementById('clave').value;
+            if (usuario === 'estudiante' && clave === '1234') {
+                localStorage.setItem('usuario', usuario);
+                window.location.href = 'main.html';
+            } else {
+                document.getElementById('mensaje-error').innerText = 'Usuario o contraseña incorrectos.';
+            }
+        }
+    </script>
+</body>
+</html>

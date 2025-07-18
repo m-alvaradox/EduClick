@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Matemáticas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/estilo.css">
+    <link rel="icon" href="educlick.png" type="image/x-icon">
+    <link rel="manifest" href="manifest.json">
+    <script src="js/sw-register.js"></script>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2>Quiz de Matemáticas - Ecuaciones Lineales</h2>
+        <div id="pregunta"></div>
+        <ul id="opciones"></ul>
+        <p id="puntaje"></p>
+        <button onclick="siguientePregunta()">Siguiente</button>
+    </div>
+
+    <script>
+        const preguntas = [
+            {
+                texto: "¿Cuál es la solución de la ecuación: 2x + 4 = 10?",
+                opciones: ["x = 1", "x = 2", "x = 3", "x = 4"],
+                respuesta: "x = 3"
+            },
+            {
+                texto: "¿Qué término representa la pendiente en la ecuación y = mx + b?",
+                opciones: ["m", "x", "b", "y"],
+                respuesta: "m"
+            },
+            {
+                texto: "Si y = 2x + 1, ¿cuál es el valor de y cuando x = 4?",
+                opciones: ["6", "7", "8", "9"],
+                respuesta: "9"
+            }
+        ];
+
+        let actual = 0;
+        let puntaje = 0;
+
+        function cargarPregunta() {
+            const p = preguntas[actual];
+            document.getElementById("pregunta").innerText = p.texto;
+            const ul = document.getElementById("opciones");
+            ul.innerHTML = "";
+            p.opciones.forEach(op => {
+                const li = document.createElement("li");
+                const btn = document.createElement("button");
+                btn.innerText = op;
+                btn.onclick = () => verificarRespuesta(op);
+                li.appendChild(btn);
+                ul.appendChild(li);
+            });
+            document.getElementById("puntaje").innerText = `Puntaje actual: ${puntaje}`;
+        }
+
+        function verificarRespuesta(opcion) {
+            if (opcion === preguntas[actual].respuesta) {
+                puntaje += 1;
+            }
+            document.getElementById("puntaje").innerText = `Puntaje actual: ${puntaje}`;
+        }
+
+        function siguientePregunta() {
+            actual++;
+            if (actual < preguntas.length) {
+                cargarPregunta();
+            } else {
+                alert(`¡Fin del quiz! Tu puntaje fue: ${puntaje} de ${preguntas.length}`);
+                localStorage.setItem("puntaje_matematicas", puntaje);
+                window.location.href = "../../main.html";
+            }
+        }
+
+        window.onload = cargarPregunta;
+    </script>
+</body>
+</html>

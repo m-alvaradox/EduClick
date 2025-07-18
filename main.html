@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educlick - Menú Principal</title>
+    <link rel="icon" href="educlick.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/estilo.css">
+        <link rel="manifest" href="manifest.json">
+    <script src="js/sw-register.js"></script>
+</head>
+<body>
+    <div class="menu-container">
+        <h2 id="bienvenida"></h2>
+        <h3>Materias</h3>
+        <ul class="materias-lista">
+            <li><a href="games/quiz/index.html">Matemáticas</a></li>
+            <li><a href="#">Biología</a></li>
+            <li><a href="#">Física</a></li>
+            <li><a href="#">Filosofía</a></li>
+            <li><a href="#">Historia</a></li>
+            <li><a href="#">Lengua y Literatura</a></li>
+        </ul>
+    </div>
+    <script>
+        const usuario = localStorage.getItem('usuario');
+        if (!usuario) {
+            window.location.href = 'index.html';
+        } else {
+            document.getElementById('bienvenida').innerText = `¡Hola ${usuario}! Selecciona una materia:`;
+        }
+    </script>
+</body>
+</html>
