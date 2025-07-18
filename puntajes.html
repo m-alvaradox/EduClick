@@ -3,34 +3,46 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Perfil del Estudiante</title>
+    <title>Educlick - Logros</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/estilo.css">
+    <link rel="stylesheet" href="css/estilo_logros.css">
+    <link rel="stylesheet" href="css/estilo_general.css">
     <link rel="icon" href="educlick.png" type="image/x-icon">
     <!--<link rel="manifest" href="manifest.json">
     <script src="js/sw-register.js"></script>-->
 </head>
 <body>
     <div class="menu-container">
-        <h2>Perfil de Usuario</h2>
-        <p id="nombreUsuario"></p>
+        <div class="perfil">
+            <img src="img/user.avif" alt="perfil">
+        </div>
+        <h2>Joel Anibal Andrade Santos</h2>
+        <!-- <p id="nombreUsuario"></p>-->
+
         <h3>Puntajes</h3>
         <ul>
             <li>Quiz de Matemáticas: <span id="puntajeQuiz">-</span> / 3</li>
             <li>Ahorcado Matemático: <span id="puntajeAhorcado">-</span> (1 = ganado)</li>
         </ul>
-        <button onclick="window.location.href='main.html'">Volver al menú</button>
     </div>
 
-    <script>
-        const usuario = localStorage.getItem('usuario');
-        document.getElementById('nombreUsuario').innerText = `👤 Usuario: ${usuario}`;
+    <nav class="tabbar">
+        <a href="main.html" class="tab">🏠<br>Inicio</a>
+        <a href="puntajes.html" class="tab">🏆<br>Logros</a>
+        <a href="#" class="tab">🎮<br>Jugar</a>
+        <a href="index.html" class="tab" onclick="localStorage.clear()">🚪<br>Salir</a>
+    </nav>
 
+    <script>
         const puntajeQuiz = localStorage.getItem('puntaje_matematicas') || 0;
         const puntajeAhorcado = localStorage.getItem('puntaje_ahorcado') || 0;
 
         document.getElementById('puntajeQuiz').innerText = puntajeQuiz;
         document.getElementById('puntajeAhorcado').innerText = puntajeAhorcado;
     </script>
+
+    <script src = "js/check_loggin.js"></script>
+
+
 </body>
 </html>

@@ -5,57 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Educlick - Menú Principal</title>
     <link rel="stylesheet" href="css/estilo_main.css">
+    <link rel="stylesheet" href="css/estilo_general.css">
     <link rel="icon" href="educlick.png" type="image/png">
     <!--<link rel="manifest" href="manifest.json">
     <script src="js/sw-register.js"></script>-->
 </head>
 <body>
     <header>
-        <div style="display:flex;align-items:center;">
-            <img src="img/educlick-logo-white.png" class="logo" alt="logo">
-        </div>
         <div class="buscador">
             <input type="text" placeholder="Buscar un tema">
         </div>
+        <div style="display:flex;align-items:center;">
+            <img src="img/educlick-logo-white.png" class="logo" alt="logo">
+        </div>
         <div class="perfil">
-            <span id="usuarioTexto">¡Hola!</span>
+            <span>¡Hola! Joel <br> <b>1° BGU CIENCIAS</b></span>
             <img src="img/user.avif" alt="perfil">
         </div>
     </header>
-
-    <div class="seccion-titulo">Logros - 1° BGU Ciencias</div>
+    <br>
+    <div class="seccion-titulo">CONTENIDO<br>DE LA SEMANA</div>
 
     <div class="cards">
         <div class="card">
             <img src="img/biologia_post.jpg" alt="biología">
             <div class="card-body">
-                <h4>Biología: El origen de la vida</h4>
+                <h4>BIOLOGÍA <br> El origen de la vida</h4>
                 <p>Descubre las diferentes teorías y conceptos alrededor del origen de la vida y el universo.</p>
             </div>
         </div>
         <div class="card">
             <img src="img/platon.webp" alt="filosofía">
             <div class="card-body">
-                <h4>Filosofía: Platón</h4>
+                <h4>FILOSOFÍA <br> Platón</h4>
                 <p>Aprende sobre la vida, ideologías y obras principales de Platón jugando.</p>
             </div>
         </div>
         <div class="card">
             <img src="img/juego_cuerda.webp" alt="física">
             <div class="card-body">
-                <h4>Física: Leyes de Newton</h4>
+                <h4>FÍSICA <br> Leyes de Newton</h4>
                 <p>Aprende jugando sobre las tres leyes del movimiento con ejemplos y retos.</p>
             </div>
         </div>
     </div>
 
-    <script>
-        const usuario = localStorage.getItem('usuario');
-        if (!usuario) {
-            window.location.href = 'index.html';
-        } else {
-            document.getElementById('usuarioTexto').innerText = `¡Hola ${usuario}!`;
-        }
-    </script>
+    <nav class="tabbar">
+        <a href="main.html" class="tab">🏠<br>Inicio</a>
+        <a href="puntajes.html" class="tab">🏆<br>Logros</a>
+        <a href="#" class="tab">🎮<br>Jugar</a>
+        <a href="index.html" class="tab" onclick="localStorage.clear()">🚪<br>Salir</a>
+    </nav>
+
+    <script src = "js/check_loggin.js"></script>
+    
 </body>
 </html>
