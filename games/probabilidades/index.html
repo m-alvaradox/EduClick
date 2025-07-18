@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Probabilidades</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 1rem;
+    }
+    .quiz-container {
+      max-width: 600px;
+      margin: auto;
+    }
+    .quiz-container h2 {
+      color: #2c3e50;
+    }
+    .opciones button {
+      display: block;
+      margin: 0.5rem 0;
+      padding: 10px;
+      width: 100%;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background-color: #f0f0f0;
+      cursor: pointer;
+    }
+    .opciones button:hover {
+      background-color: #dceaff;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h2>Quiz: Probabilidades</h2>
+    <div id="pregunta"></div>
+    <div class="opciones" id="opciones"></div>
+    <p id="puntaje"></p>
+    <button onclick="siguiente()">Siguiente</button>
+  </div>
+
+  <script>
+    const preguntas = [
+      {
+        texto: "¿Cuál es la probabilidad de obtener un número par al lanzar un dado?",
+        opciones: ["1/2", "1/3", "2/3", "1/6"],
+        respuesta: "1/2"
+      },
+      {
+        texto: "¿Cuántos resultados posibles hay al lanzar dos monedas?",
+        opciones: ["2", "3", "4", "6"],
+        respuesta: "4"
+      },
+      {
+        texto: "En una bolsa hay 3 bolas rojas y 2 verdes. ¿Cuál es la probabilidad de sacar una roja?",
+        opciones: ["1/5", "2/5", "3/5", "4/5"],
+        respuesta: "3/5"
+      }
+    ];
+
+    let actual = 0;
+    let puntaje = 0;
+
+    function mostrarPregunta() {
+      const p = preguntas[actual];
+      document.getElementById("pregunta").innerText = p.texto;
+      const contenedor = document.getElementById("opciones");
+      contenedor.innerHTML = "";
+      p.opciones.forEach(op => {
+        const btn = document.createElement("button");
+        btn.innerText = op;
+        btn.onclick = () => evaluar(op);
+        contenedor.appendChild(btn);
+      });
+      document.getElementById("puntaje").innerText = `Puntaje actual: ${puntaje}`;
+    }
+
+    function evaluar(opcion) {
+      if (opcion === preguntas[actual].respuesta) {
+        puntaje++;
+      }
+      document.getElementById("puntaje").innerText = `Puntaje actual: ${puntaje}`;
+    }
+
+    function siguiente() {
+      actual++;
+      if (actual < preguntas.length) {
+        mostrarPregunta();
+      } else {
+        alert("¡Fin del quiz! Puntaje final: " + puntaje);
+        localStorage.setItem("puntaje_probabilidades", puntaje);
+        window.location.href = "../../puntajes.html";
+      }
+    }
+
+    window.onload = mostrarPregunta;
+  </script>
+</body>
+</html>

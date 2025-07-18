@@ -23,6 +23,7 @@
         <ul>
             <li>Quiz de Matemáticas: <span id="puntajeQuiz">-</span> / 3</li>
             <li>Ahorcado Matemático: <span id="puntajeAhorcado">-</span> (1 = ganado)</li>
+            <li>Probabilidades: <span id="puntajeProb">-</span> / 3</li>
         </ul>
     </div>
 
@@ -39,6 +40,7 @@
 
         document.getElementById('puntajeQuiz').innerText = puntajeQuiz;
         document.getElementById('puntajeAhorcado').innerText = puntajeAhorcado;
+        document.getElementById('puntajeProb').innerText = localStorage.getItem('puntaje_probabilidades') || 0;
     </script>
 
     <script src = "js/check_loggin.js"></script>
