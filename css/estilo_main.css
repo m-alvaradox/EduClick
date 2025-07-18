@@ -1,0 +1,63 @@
+    header {
+            background: linear-gradient(135deg, #ff6600, #ff9900);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        header img.logo {
+            height: 80px;
+            margin-right: 10px;
+        }
+        .perfil {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .perfil img {
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+        }
+        .buscador input {
+            padding: 0.5rem;
+            border-radius: 20px;
+            border: none;
+            width: 200px;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-body {
+            padding: 1rem;
+        }
+        .card-body h4 {
+            margin: 0 0 0.5rem;
+            color: #2c3e50;
+        }
+        .card-body p {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .seccion-titulo {
+            padding: 0 1rem;
+            font-size: 1.2rem;
+            color: #34495e;
+            font-weight: bold;
+        }

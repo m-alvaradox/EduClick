@@ -10,7 +10,9 @@ const urlsToCache = [
   "games/quiz/index.html",
   "games/ahorcado/index.html",
   "educlick.png",
-  "/img/fondo.png"
+  "/img/fondo.png",
+  "/img/kid_playing.png",
+  "/img/educlick-logo.png"
 ];
 
 self.addEventListener("install", (event) => {

@@ -1,34 +1,60 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Educlick - Menú Principal</title>
-    <link rel="icon" href="educlick.png" type="image/x-icon">
-    <link rel="stylesheet" href="css/estilo.css">
-        <link rel="manifest" href="manifest.json">
-    <script src="js/sw-register.js"></script>
+    <link rel="stylesheet" href="css/estilo_main.css">
+    <link rel="icon" href="educlick.png" type="image/png">
+    <!--<link rel="manifest" href="manifest.json">
+    <script src="js/sw-register.js"></script>-->
 </head>
 <body>
-    <div class="menu-container">
-        <h2 id="bienvenida"></h2>
-        <h3>Materias</h3>
-        <ul class="materias-lista">
-            <li><a href="games/quiz/index.html">Matemáticas</a></li>
-            <li><a href="#">Biología</a></li>
-            <li><a href="#">Física</a></li>
-            <li><a href="#">Filosofía</a></li>
-            <li><a href="#">Historia</a></li>
-            <li><a href="#">Lengua y Literatura</a></li>
-        </ul>
+    <header>
+        <div style="display:flex;align-items:center;">
+            <img src="img/educlick-logo-white.png" class="logo" alt="logo">
+        </div>
+        <div class="buscador">
+            <input type="text" placeholder="Buscar un tema">
+        </div>
+        <div class="perfil">
+            <span id="usuarioTexto">¡Hola!</span>
+            <img src="img/user.avif" alt="perfil">
+        </div>
+    </header>
+
+    <div class="seccion-titulo">Logros - 1° BGU Ciencias</div>
+
+    <div class="cards">
+        <div class="card">
+            <img src="img/biologia_post.jpg" alt="biología">
+            <div class="card-body">
+                <h4>Biología: El origen de la vida</h4>
+                <p>Descubre las diferentes teorías y conceptos alrededor del origen de la vida y el universo.</p>
+            </div>
+        </div>
+        <div class="card">
+            <img src="img/platon.webp" alt="filosofía">
+            <div class="card-body">
+                <h4>Filosofía: Platón</h4>
+                <p>Aprende sobre la vida, ideologías y obras principales de Platón jugando.</p>
+            </div>
+        </div>
+        <div class="card">
+            <img src="img/juego_cuerda.webp" alt="física">
+            <div class="card-body">
+                <h4>Física: Leyes de Newton</h4>
+                <p>Aprende jugando sobre las tres leyes del movimiento con ejemplos y retos.</p>
+            </div>
+        </div>
     </div>
+
     <script>
         const usuario = localStorage.getItem('usuario');
         if (!usuario) {
             window.location.href = 'index.html';
         } else {
-            document.getElementById('bienvenida').innerText = `¡Hola ${usuario}! Selecciona una materia:`;
+            document.getElementById('usuarioTexto').innerText = `¡Hola ${usuario}!`;
         }
     </script>
 </body>

@@ -81,3 +81,7 @@ ul li a:hover, ul li button:hover {
     margin-top: 1rem;
     color: #34495e;
 }
+
+input {
+    text-align: center;
+}
