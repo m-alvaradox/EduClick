@@ -8,12 +8,12 @@
   "theme_color": "#007bff",
   "icons": [
     {
-      "src": "educlick.png",
+      "src": "/public/pwa-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "educlick.png",
+      "src": "/public/pwa-512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
