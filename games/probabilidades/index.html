@@ -1,45 +1,112 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Probabilidades</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/estilo_general.css">
+  <link rel="icon" href="/educlick.png" type="image/png">
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: sans-serif;
-      padding: 1rem;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url("/img/probabilidades.jpg");
+      background-size: cover;
+      background-position: center;    
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
     }
-    .quiz-container {
-      max-width: 600px;
-      margin: auto;
-    }
-    .quiz-container h2 {
+    h1 {
+      margin-top: 1rem;
       color: #2c3e50;
+      animation: fadeInDown 1s ease;
+    }
+    .quiz-box {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      margin-top: 1rem;
+      text-align: center;
+      animation: fadeInUp 1s ease;
+    }
+    .pregunta {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
     }
     .opciones button {
       display: block;
-      margin: 0.5rem 0;
-      padding: 10px;
       width: 100%;
-      font-size: 16px;
+      padding: 12px;
+      margin: 10px 0;
+      background: #3498db;
+      color: white;
       border: none;
       border-radius: 10px;
-      background-color: #f0f0f0;
+      font-size: 1rem;
       cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
     }
     .opciones button:hover {
-      background-color: #dceaff;
+      background: #2980b9;
+      transform: scale(1.02);
+    }
+    #puntaje {
+      font-weight: bold;
+      color: #2c3e50;
+      margin-top: 1rem;
+    }
+    #siguiente {
+      margin-top: 1rem;
+      padding: 10px 20px;
+      background: #2ecc71;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #siguiente:hover {
+      background: #27ae60;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    audio {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <div class="quiz-container">
-    <h2>Quiz: Probabilidades</h2>
-    <div id="pregunta"></div>
+  <h1>🎲 Quiz de Probabilidades</h1>
+  <div class="quiz-box">
+    <div class="pregunta" id="pregunta"></div>
     <div class="opciones" id="opciones"></div>
-    <p id="puntaje"></p>
-    <button onclick="siguiente()">Siguiente</button>
+    <div id="puntaje"></div>
+    <button id="siguiente" onclick="siguiente()">Siguiente</button>
   </div>
+
+  <audio id="bg-music" autoplay loop>
+    <source src="/audio/playground_kids.mp3" type="audio/mp3">
+    Tu navegador no soporta música de fondo.
+  </audio>
 
   <script>
     const preguntas = [
@@ -66,22 +133,28 @@
     function mostrarPregunta() {
       const p = preguntas[actual];
       document.getElementById("pregunta").innerText = p.texto;
-      const contenedor = document.getElementById("opciones");
-      contenedor.innerHTML = "";
+      const opciones = document.getElementById("opciones");
+      opciones.innerHTML = "";
       p.opciones.forEach(op => {
         const btn = document.createElement("button");
         btn.innerText = op;
-        btn.onclick = () => evaluar(op);
-        contenedor.appendChild(btn);
+        btn.onclick = () => verificar(op, btn);
+        opciones.appendChild(btn);
       });
       document.getElementById("puntaje").innerText = `Puntaje actual: ${puntaje}`;
     }
 
-    function evaluar(opcion) {
-      if (opcion === preguntas[actual].respuesta) {
+    function verificar(opcion, btn) {
+    if (opcion === preguntas[actual].respuesta) {
         puntaje++;
-      }
-      document.getElementById("puntaje").innerText = `Puntaje actual: ${puntaje}`;
+        btn.style.backgroundColor = "#2ecc71";
+        alert("¡Respuesta correcta!");
+    } else {
+        btn.style.backgroundColor = "#e74c3c";
+        alert("Respuesta incorrecta.");
+    }
+    document.querySelectorAll(".opciones button").forEach(b => b.disabled = true);
+    document.getElementById("puntaje").innerText = `Puntaje actual: ${puntaje}`;
     }
 
     function siguiente() {
@@ -89,13 +162,24 @@
       if (actual < preguntas.length) {
         mostrarPregunta();
       } else {
-        alert("¡Fin del quiz! Puntaje final: " + puntaje);
+        alert("¡Has completado el quiz! Tu puntaje es: " + puntaje);
         localStorage.setItem("puntaje_probabilidades", puntaje);
         window.location.href = "../../puntajes.html";
       }
     }
 
-    window.onload = mostrarPregunta;
+    window.onload = () => {
+      mostrarPregunta();
+      document.getElementById("bg-music").volume = 0.1;
+    };
   </script>
+    <nav class="tabbar">
+        <a href="/main.html" class="tab">🏠<br>Inicio</a>
+        <a href="/puntajes.html" class="tab">🏆<br>Logros</a>
+        <a href="#" class="tab">🎮<br>Jugar</a>
+        <a href="/index.html" class="tab" onclick="localStorage.clear()">🚪<br>Salir</a>
+    </nav>
+
+  <script src = "js/check_loggin.js"></script>
 </body>
 </html>

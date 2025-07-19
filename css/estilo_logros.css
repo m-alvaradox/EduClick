@@ -1,97 +1,72 @@
 body {
     margin: 0;
-    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f7faff;
+    padding-bottom: 80px;
+}
+
+header {
     background: url("/img/fondo.png");
-    min-height: 100vh;
+    background-size: cover;     
+    background-position: center;    
+    background-repeat: no-repeat;
+    color: white;
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+}
+
+.container {
+    padding: 1rem;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+}
+.card h4 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.puntaje {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0.3rem 0.8rem;
+    border-radius: 10px;
+}
+.bajo {
+    background: #ffe5e5;
+    color: #c0392b;
+}
+.medio {
+    background: #fff9db;
+    color: #e67e22;
+}
+.alto {
+    background: #e0f7e9;
+    color: #27ae60;
 }
 
 .perfil {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
 }
 .perfil img {
-    height: 100px;
-    width: 100px;
+    height: 150px;
+    width: 150px;
     border-radius: 50%;
 }
-
-.login-container, .menu-container, .quiz-container {
-    background-color: #ffffffdd;
-    padding: 2rem;
-    border-radius: 20px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
-}
-
-h1, h2, h3 {
-    color: #2c3e50;
-    margin-bottom: 1rem;
-}
-
-input[type="text"], input[type="password"] {
-    width: 90%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    font-size: 16px;
-}
-
-button {
-    padding: 12px 24px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    margin-top: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-ul li {
-    margin: 10px 0;
-}
-
-ul li a, ul li button {
-    display: block;
-    width: 100%;
-    padding: 14px;
-    background-color: #f0f4ff;
-    color: #333;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: transform 0.2s, background-color 0.3s;
-}
-
-ul li a:hover, ul li button:hover {
-    background-color: #dde6ff;
-    transform: scale(1.02);
-}
-
-#puntaje {
-    font-weight: bold;
-    margin-top: 1rem;
-    color: #34495e;
-}
-
-input {
-    text-align: center;
+.perfil h2 {
+    margin-top: 0.3rem; /* Menos espacio arriba */
 }

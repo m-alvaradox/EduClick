@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Juegos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel = "stylesheet" href = "css/estilo_general.css">
+  <link rel="icon" href="educlick.png" type="image/png">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: white;
+      padding-bottom: 80px;
+    }
+    header {
+      background: url("/img/fondo.png");
+      background-size: cover;     
+      background-position: center;    
+      background-repeat: no-repeat;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+    .search-container {
+      padding: 1rem;
+      text-align: center;
+    }
+    .search-container input {
+      width: 80%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    .materia {
+      margin: 1.5rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .materia h3 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+    .tema {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      background: #ecf3fc;
+      border-radius: 8px;
+    }
+    .tema button {
+      background: #2ecc71;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    .tema button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+  <header>🎮 Juegos</header>
+
+  <div class="search-container">
+    <input type="text" id="buscador" placeholder="🔍 Buscar tema..." onkeyup="filtrarTemas()">
+  </div>
+
+  <div class="materia">
+    <h3>📘 Matemáticas</h3>
+    <div class="tema">
+      <span>📊 Probabilidades</span>
+      <button onclick="location.href='games/probabilidades/index.html'">JUGAR</button>
+    </div>
+  </div>
+
+  <div class="materia">
+    <h3>📗 Lengua y Literatura</h3>
+    <div class="tema">
+      <span>📖 Sinónimos</span>
+      <button disabled>Próximamente</button>
+    </div>
+    <div class="tema">
+      <span>📖 Antónimos</span>
+      <button disabled>Próximamente</button>
+    </div>
+  </div>
+
+  <div class="materia">
+    <h3>📙 Ciencias Naturales</h3>
+    <div class="tema">
+      <span>🧪 Estados de la materia</span>
+      <button disabled>Próximamente</button>
+    </div>
+  </div>
+
+    <nav class="tabbar">
+        <a href="main.html" class="tab">🏠<br>Inicio</a>
+        <a href="puntajes.html" class="tab">🏆<br>Logros</a>
+        <a href="jugar.html" class="tab">🎮<br>Jugar</a>
+        <a href="index.html" class="tab" onclick="localStorage.clear()">🚪<br>Salir</a>
+    </nav>
+
+  <script>
+    function filtrarTemas() {
+      const input = document.getElementById('buscador').value.toLowerCase();
+      const temas = document.querySelectorAll('.tema');
+      temas.forEach(tema => {
+        const texto = tema.innerText.toLowerCase();
+        tema.style.display = texto.includes(input) ? "flex" : "none";
+      });
+    }
+  </script>
+  <script src = "js/check_loggin.js"></script>
+
+</body>
+</html>

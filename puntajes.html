@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Educlick - Logros</title>
+    <title>Logros</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/estilo_logros.css">
     <link rel="stylesheet" href="css/estilo_general.css">
@@ -12,36 +11,60 @@
     <script src="js/sw-register.js"></script>-->
 </head>
 <body>
-    <div class="menu-container">
-        <div class="perfil">
-            <img src="img/user.avif" alt="perfil">
-        </div>
+
+  <header>
+
+    <div class="perfil">
+        <img src="img/user.avif" alt="perfil">
         <h2>Joel Anibal Andrade Santos</h2>
+    </div>
+
         <!-- <p id="nombreUsuario"></p>-->
 
-        <h3>Puntajes</h3>
-        <ul>
-            <li>Quiz de Matemáticas: <span id="puntajeQuiz">-</span> / 3</li>
-            <li>Ahorcado Matemático: <span id="puntajeAhorcado">-</span> (1 = ganado)</li>
-            <li>Probabilidades: <span id="puntajeProb">-</span> / 3</li>
-        </ul>
+
+  </header>
+  <div class="container">
+    <div class="card">
+      <h4>📊 Probabilidades (Matemáticas)</h4>
+      <div id="puntajeProb" class="puntaje">-</div>
     </div>
+    <div class="card">
+      <h4>📖 Sinónimos (Lengua)</h4>
+      <div class="puntaje">Próximamente</div>
+    </div>
+    <div class="card">
+      <h4>📖 Antónimos (Lengua)</h4>
+      <div class="puntaje">Próximamente</div>
+    </div>
+    <div class="card">
+      <h4>🧪 Estados de la materia (Ciencias)</h4>
+      <div class="puntaje">Próximamente</div>
+    </div>
+  </div>
 
     <nav class="tabbar">
         <a href="main.html" class="tab">🏠<br>Inicio</a>
         <a href="puntajes.html" class="tab">🏆<br>Logros</a>
-        <a href="#" class="tab">🎮<br>Jugar</a>
+        <a href="jugar.html" class="tab">🎮<br>Jugar</a>
         <a href="index.html" class="tab" onclick="localStorage.clear()">🚪<br>Salir</a>
     </nav>
 
-    <script>
-        const puntajeQuiz = localStorage.getItem('puntaje_matematicas') || 0;
-        const puntajeAhorcado = localStorage.getItem('puntaje_ahorcado') || 0;
+  <script>
+    const puntaje = parseInt(localStorage.getItem("puntaje_probabilidades")) || 0;
+    const total = 3;
+    const porcentaje = Math.round((puntaje / total) * 100);
 
-        document.getElementById('puntajeQuiz').innerText = puntajeQuiz;
-        document.getElementById('puntajeAhorcado').innerText = puntajeAhorcado;
-        document.getElementById('puntajeProb').innerText = localStorage.getItem('puntaje_probabilidades') || 0;
-    </script>
+    const badge = document.getElementById("puntajeProb");
+    badge.innerText = `${puntaje} / ${total}`;
+
+    if (porcentaje >= 70) {
+      badge.classList.add("alto");
+    } else if (porcentaje >= 40) {
+      badge.classList.add("medio");
+    } else {
+      badge.classList.add("bajo");
+    }
+  </script>
 
     <script src = "js/check_loggin.js"></script>
 
