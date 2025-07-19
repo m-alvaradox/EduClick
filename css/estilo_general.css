@@ -17,11 +17,12 @@
     font-size: 14px;
     color: #333;
     text-decoration: none;
+    font-family: 'Poppins','Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .tabbar .tab:hover {
     background: #f0f0f0;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Rubik','Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
