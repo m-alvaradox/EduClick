@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="/css/estilo_general.css">
+  <link rel="icon" href="/educlick.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+  <title>Carrera de Antónimos</title>
+  <style>
+    body {
+      font-family: 'Quicksand','Segoe UI', sans-serif;
+      background-color: #fff8e1;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #ff9800;
+      color: white;
+      padding: 1rem;
+      font-size: 1.5rem;
+    }
+
+    #game {
+      margin: 2rem auto;
+      max-width: 600px;
+    }
+
+    #word {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    #progress-container {
+      width: 80%;
+      height: 20px;
+      background-color: #ffe0b2;
+      margin: 0 auto 1rem;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 100%;
+      background-color: #ff6f00;
+      transition: width 1s linear;
+    }
+
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .option {
+      background-color: #ffffff;
+      padding: 1rem 2rem;
+      border: 2px solid #ff9800;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s;
+    }
+
+    .option.correct {
+      background-color: #a5d6a7;
+    }
+
+    .option.wrong {
+      background-color: #ef9a9a;
+    }
+
+    #result {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    #finish {
+      display: none;
+      font-size: 1.3rem;
+      margin-top: 2rem;
+      color: #2e7d32;
+    }
+
+    #score {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    button {
+      margin-top: 2rem;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      background-color: #ff9800;
+      color: white;
+      cursor: pointer;
+      font-family: 'Quicksand','Segoe UI', sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+  <header>Se te acaba el tiempo ⌛</header>
+
+  <div id="game">
+    <div id="word">Cargando...</div>
+    <div id="progress-container"><div id="progress-bar"></div></div>
+    <div class="options" id="options"></div>
+    <div id="result"></div>
+    <div id="score"></div>
+    <div id="finish">🎉 ¡Juego terminado!</div>
+    <button onclick="location.href='../../puntajes.html'">Ver Puntajes</button>
+  </div>
+
+  <script>
+    const questions = [
+      { word: "feliz", options: ["contento", "triste", "amable", "alegre"], answer: "triste" },
+      { word: "rápido", options: ["lento", "veloz", "activo", "fuerte"], answer: "lento" },
+      { word: "alto", options: ["bajo", "pequeño", "largo", "grande"], answer: "bajo" },
+      { word: "nuevo", options: ["moderno", "viejo", "actual", "reciente"], answer: "viejo" },
+      { word: "fuerte", options: ["débil", "rudo", "resistente", "valiente"], answer: "débil" }
+    ];
+
+    let current = 0;
+    let score = 0;
+    const timeLimit = 5;
+    let countdown;
+
+    const wordEl = document.getElementById("word");
+    const optionsEl = document.getElementById("options");
+    const resultEl = document.getElementById("result");
+    const scoreEl = document.getElementById("score");
+    const finishEl = document.getElementById("finish");
+    const progressBar = document.getElementById("progress-bar");
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function loadQuestion() {
+      resultEl.textContent = "";
+      optionsEl.innerHTML = "";
+      progressBar.style.width = "100%";
+      progressBar.style.transition = "none";
+
+      if (current >= questions.length) {
+        finishEl.style.display = "block";
+        localStorage.setItem("puntaje_antonimos", score);
+        scoreEl.textContent = `Puntaje: ${score} / ${questions.length}`;
+        return;
+      }
+
+      const q = questions[current];
+      wordEl.textContent = `¿Antónimo de "${q.word}"?`;
+
+      shuffle(q.options).forEach(option => {
+        const btn = document.createElement("div");
+        btn.className = "option";
+        btn.textContent = option;
+        btn.ontouchstart = btn.onclick = () => {
+          clearInterval(countdown);
+          verificarRespuesta(option, q.answer, btn);
+        };
+        optionsEl.appendChild(btn);
+      });
+
+      iniciarTemporizador(q.answer);
+    }
+
+    function iniciarTemporizador(correcta) {
+      let tiempo = timeLimit;
+      progressBar.style.width = "100%";
+      setTimeout(() => progressBar.style.transition = `width ${timeLimit}s linear`);
+      setTimeout(() => progressBar.style.width = "0%", 50);
+
+      countdown = setTimeout(() => {
+        resultEl.textContent = `⏰ Tiempo agotado. Era: ${correcta}`;
+        current++;
+        setTimeout(loadQuestion, 1200);
+      }, timeLimit * 1000);
+    }
+
+    function verificarRespuesta(elegida, correcta, boton) {
+      const opciones = document.querySelectorAll(".option");
+      opciones.forEach(btn => btn.style.pointerEvents = "none");
+
+      if (elegida === correcta) {
+        boton.classList.add("correct");
+        resultEl.textContent = "✅ ¡Correcto!";
+        score++;
+      } else {
+        boton.classList.add("wrong");
+        resultEl.textContent = `❌ Incorrecto. Era: ${correcta}`;
+      }
+      current++;
+      setTimeout(loadQuestion, 1200);
+    }
+
+    loadQuestion();
+  </script>
+
+      <nav class="tabbar">
+        <a href="/main.html" class="tab"><img src = "/icons/home.svg"><br>Inicio</a>
+        <a href="/puntajes.html" class="tab"><img src = "/icons/win.svg"><br>Logros</a>
+        <a href="/jugar.html" class="tab"><img src = "/icons/videogame.svg"><br>Jugar</a>
+        <a href="/index.html" class="tab" onclick="localStorage.clear()"><img src = "/icons/exit.svg"><br>Salir</a>
+    </nav>
+
+  <script src = "/js/check_loggin.js"></script>
+
+</body>
+</html>

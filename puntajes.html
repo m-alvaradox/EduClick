@@ -36,12 +36,12 @@
       <div id= "puntajesin" class="puntaje">-</div>
     </div>
     <div class="card">
-      <h4>📖 Antónimos (Lengua)</h4>
-      <div class="puntaje">Próximamente</div>
+      <h4>📖 Antónimos - Se te acaba el tiempo (Lengua y Literatura)</h4>
+      <div class="puntaje" id="puntajeAnt"></div>
     </div>
     <div class="card">
-      <h4>🧪 Estados de la materia (Ciencias)</h4>
-      <div class="puntaje">Próximamente</div>
+      <h4>🧪 Estados de la materia - Salta & Salta (Ciencias Naturales)</h4>
+      <div class="puntaje" id="puntajeEstados"></div>
     </div>
   </div>
 
@@ -82,9 +82,44 @@
   } else {
     badgeSin.classList.add("bajo");
   }
+
+const anton = parseInt(localStorage.getItem("puntaje_antonimos")) || 0;
+const totalAnton = 5;
+const porcentajeAnton = Math.round((anton / totalAnton) * 100);
+
+const badgeAnton = document.getElementById("puntajeAnt");
+badgeAnton.innerText = `${anton} / ${totalAnton}`;
+
+if (porcentajeAnton >= 70) {
+  badgeAnton.classList.add("alto");
+} else if (porcentajeAnton >= 40) {
+  badgeAnton.classList.add("medio");
+} else {
+  badgeAnton.classList.add("bajo");
+}
+
+const estados = parseInt(localStorage.getItem("puntaje_estados")) || 0;
+const totalEstados = 5; // o el total que definas como ideal
+const porcentajeEstados = Math.round((estados / totalEstados) * 100);
+
+const badgeEstados = document.getElementById("puntajeEstados");
+badgeEstados.innerText = `${estados} / ${totalEstados}`;
+
+if (porcentajeEstados >= 70) {
+  badgeEstados.classList.add("alto");
+} else if (porcentajeEstados >= 40) {
+  badgeEstados.classList.add("medio");
+} else {
+  badgeEstados.classList.add("bajo");
+}
+
+
 </script>
 
-    <script src = "js/check_loggin.js"></script>
+
+
+
+<script src = "js/check_loggin.js"></script>
 
 
 </body>

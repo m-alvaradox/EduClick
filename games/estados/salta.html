@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="/css/estilo_general.css">
+  <link rel="icon" href="/educlick.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+  <title>Salta & Salta</title>
+  <style>
+    body {
+      font-family: 'Quicksand','Segoe UI', sans-serif;
+      background-color: #b2ebf2;
+      overflow: hidden;
+      margin: 0;
+    }
+    canvas {
+      display: block;
+      margin: auto;
+      background: linear-gradient(to top, #ffffff, #b2ebf2);
+      border-bottom: 5px solid #00796b;
+    }
+    #ui {
+      text-align: center;
+      padding: 10px;
+      background-color: #00796b;
+      color: white;
+    }
+    #puntaje {
+      font-weight: bold;
+    }
+    #instruccion {
+      font-size: 1.2rem;
+    }
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="juego" width="800" height="400"></canvas>
+<div id="ui">
+  <div id="instruccion">Toca solo los <strong>productos en estado líquido</strong> 💧</div>
+  Puntaje: <span id="puntaje">0</span>
+</div>
+
+  <audio id="bg-music" autoplay loop>
+    <source src="/audio/salta.mp3" type="audio/mp3">
+    Tu navegador no soporta música de fondo.
+  </audio>
+
+<script>
+  const canvas = document.getElementById("juego");
+  const ctx = canvas.getContext("2d");
+  const puntajeUI = document.getElementById("puntaje");
+
+  const personaje = { x: 80, y: 300, vy: 0, jumping: false, ancho: 40, alto: 60 };
+  const gravedad = 0.7;
+  let puntaje = 0;
+  let frame = 0;
+  let objetos = [];
+
+  const liquidos = ["🥛", "🧃", "🧴"];
+  const solidos = ["🍞", "🧊", "🧀"];
+  const gaseosos = ["☁️", "💨", "🌫️"];
+
+  function getRandomElemento() {
+    const tipo = ["líquido", "sólido", "gaseoso"][Math.floor(Math.random() * 3)];
+    let emoji;
+    if (tipo === "líquido") emoji = liquidos[Math.floor(Math.random() * liquidos.length)];
+    if (tipo === "sólido") emoji = solidos[Math.floor(Math.random() * solidos.length)];
+    if (tipo === "gaseoso") emoji = gaseosos[Math.floor(Math.random() * gaseosos.length)];
+    return { tipo, emoji };
+  }
+
+  function crearObjeto() {
+    const o = getRandomElemento();
+    objetos.push({
+      x: 800,
+      y: 310,
+      ancho: 40,
+      alto: 40,
+      tipo: o.tipo,
+      emoji: o.emoji,
+      tocado: false
+    });
+  }
+
+  function dibujarPersonaje() {
+    ctx.fillStyle = "#ffca28";
+    ctx.beginPath();
+    ctx.arc(personaje.x + 20, personaje.y + 15, 15, 0, Math.PI * 2); // cabeza
+    ctx.fill();
+    ctx.fillStyle = "#0288d1";
+    ctx.fillRect(personaje.x, personaje.y + 30, personaje.ancho, 30); // cuerpo
+  }
+
+  function dibujarObjetos() {
+    ctx.font = "30px serif";
+    objetos.forEach(obj => {
+      ctx.fillText(obj.emoji, obj.x, obj.y + 30);
+    });
+  }
+
+  function detectarColision(a, b) {
+    return (
+      a.x < b.x + b.ancho &&
+      a.x + a.ancho > b.x &&
+      a.y < b.y + b.alto &&
+      a.y + a.alto > b.y
+    );
+  }
+
+  function actualizar() {
+    frame++;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    personaje.vy += gravedad;
+    personaje.y += personaje.vy;
+
+    if (personaje.y > 300) {
+      personaje.y = 300;
+      personaje.vy = 0;
+      personaje.jumping = false;
+    }
+
+    objetos.forEach(obj => {
+      obj.x -= 4;
+      if (!obj.tocado && detectarColision(personaje, obj)) {
+        obj.tocado = true;
+        if (obj.tipo === "líquido") {
+          puntaje++;
+        } else {
+          puntaje--;
+        }
+        puntajeUI.textContent = puntaje;
+      }
+    });
+
+    objetos = objetos.filter(obj => obj.x + obj.ancho > 0);
+
+    if (frame % 90 === 0) {
+      crearObjeto();
+    }
+
+    dibujarPersonaje();
+    dibujarObjetos();
+
+    requestAnimationFrame(actualizar);
+  }
+
+  window.addEventListener("touchstart", () => {
+    if (!personaje.jumping) {
+      personaje.vy = -12;
+      personaje.jumping = true;
+    }
+  });
+
+  actualizar();
+
+      window.onload = () => {
+      document.getElementById("bg-music").volume = 0.1;
+    };
+</script>
+
+    <nav class="tabbar">
+        <a href="/main.html" class="tab"><img src = "/icons/home.svg"><br>Inicio</a>
+        <a href="/puntajes.html" class="tab"><img src = "/icons/win.svg"><br>Logros</a>
+        <a href="/jugar.html" class="tab"><img src = "/icons/videogame.svg"><br>Jugar</a>
+        <a href="/index.html" class="tab" onclick="localStorage.clear()"><img src = "/icons/exit.svg"><br>Salir</a>
+    </nav>
+
+  <script src = "/js/check_loggin.js"></script>
+
+</body>
+</html>
