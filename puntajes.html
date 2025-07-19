@@ -28,12 +28,12 @@
   </header>
   <div class="container">
     <div class="card">
-      <h4>📊 Probabilidades (Matemáticas)</h4>
+      <h4>📊 Probabilidades - La Hora de la Verdad (Matemáticas)</h4>
       <div id="puntajeProb" class="puntaje">-</div>
     </div>
     <div class="card">
-      <h4>📖 Sinónimos (Lengua)</h4>
-      <div class="puntaje">Próximamente</div>
+      <h4>📖 Sinónimos - Memoria Brillante (Lengua y Literatura)</h4>
+      <div id= "puntajesin" class="puntaje">-</div>
     </div>
     <div class="card">
       <h4>📖 Antónimos (Lengua)</h4>
@@ -52,22 +52,37 @@
         <a href="index.html" class="tab" onclick="localStorage.clear()"><img src = "/icons/exit.svg"><br>Salir</a>
     </nav>
 
-  <script>
-    const puntaje = parseInt(localStorage.getItem("puntaje_probabilidades")) || 0;
-    const total = 3;
-    const porcentaje = Math.round((puntaje / total) * 100);
+<script>
+  const puntaje = parseInt(localStorage.getItem("puntaje_probabilidades")) || 0;
+  const total = 3;
+  const porcentaje = Math.round((puntaje / total) * 100);
 
-    const badge = document.getElementById("puntajeProb");
-    badge.innerText = `${puntaje} / ${total}`;
+  const badge = document.getElementById("puntajeProb");
+  badge.innerText = `${puntaje} / ${total}`;
 
-    if (porcentaje >= 70) {
-      badge.classList.add("alto");
-    } else if (porcentaje >= 40) {
-      badge.classList.add("medio");
-    } else {
-      badge.classList.add("bajo");
-    }
-  </script>
+  if (porcentaje >= 70) {
+    badge.classList.add("alto");
+  } else if (porcentaje >= 40) {
+    badge.classList.add("medio");
+  } else {
+    badge.classList.add("bajo");
+  }
+
+  const sin = parseInt(localStorage.getItem("puntaje_memoria_sinonimos")) || 0;
+  const totalSin = 6;
+  const porcentajeSin = Math.round((sin / totalSin) * 100);
+
+  const badgeSin = document.getElementById("puntajesin");
+  badgeSin.innerText = `${sin} / ${totalSin}`;
+
+  if (porcentajeSin >= 70) {
+    badgeSin.classList.add("alto");
+  } else if (porcentajeSin >= 40) {
+    badgeSin.classList.add("medio");
+  } else {
+    badgeSin.classList.add("bajo");
+  }
+</script>
 
     <script src = "js/check_loggin.js"></script>
 

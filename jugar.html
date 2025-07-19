@@ -17,7 +17,7 @@
       padding-bottom: 80px;
     }
     header {
-      background: url("/img/fondo.png");
+      background: url("/img/fondo_juegos.jpg");
       background-size: cover;     
       background-position: center;    
       background-repeat: no-repeat;
@@ -73,7 +73,11 @@
 </head>
 <body>
 
-  <header>🎮 Juegos</header>
+  <header>
+
+    <h2>EDUCLICK GAMES 🎮 </h2>
+  
+  </header>
 
   <div class="search-container">
     <input type="text" id="buscador" placeholder="🔍 Buscar un tema" onkeyup="filtrarTemas()">
@@ -82,7 +86,7 @@
   <div class="materia">
     <h3>📘 Matemáticas</h3>
     <div class="tema">
-      <span>📊 Probabilidades</span>
+      <span>📊 Probabilidades (La Hora de la Verdad)</span>
       <button onclick="location.href='games/probabilidades/index.html'">JUGAR</button>
     </div>
   </div>
@@ -90,8 +94,8 @@
   <div class="materia">
     <h3>📗 Lengua y Literatura</h3>
     <div class="tema">
-      <span>📖 Sinónimos</span>
-      <button disabled>PRÓXIMAMENTE</button>
+      <span>📖 Sinónimos (Memoria Brillante)</span>
+      <button onclick="location.href='games/sinonimos/memoria.html'">JUGAR</button>
     </div>
     <div class="tema">
       <span>📖 Antónimos</span>
