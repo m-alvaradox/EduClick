@@ -71,6 +71,7 @@
       margin-top: 1rem;
       font-size: 1.2rem;
       color: #27ae60;
+      background: rgba(255, 255, 255, 0.8);
     }
 
     button {
@@ -99,12 +100,40 @@
     }
 
 
-  </style>
+  
+#reloj {
+  margin: 1rem auto;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #e74c3c;
+  background: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  width: fit-content;
+  animation: fadeInDown 1s ease;
+}
+
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+.temporizador-final {
+  animation: shake 0.5s ease;
+  color: red;
+  font-weight: bold;
+}
+
+</style>
 </head>
 <body>
 
   <header>🧠 Memoria Brillante</header>
   <div id="tablero"></div>
+  <div id="reloj">⏳ Tiempo restante: 60 s</div>
   <div id="mensaje"></div>
   <button onclick="reiniciar()">Reiniciar</button>
 
@@ -112,6 +141,10 @@
     <source src="/audio/playground_kids.mp3" type="audio/mp3">
     Tu navegador no soporta música de fondo.
   </audio>
+<audio id="tiempo-acabado">
+  <source src="/audio/timeout.mp3" type="audio/mp3">
+</audio>
+
 
 
   <script>
@@ -190,16 +223,52 @@
       }
     }
 
+let tiempoLimite = 60;
+let intervalo;
+
+function iniciarTemporizador() {
+  document.getElementById("reloj").textContent = `⏳ Tiempo restante: ${tiempoLimite} s`;
+  intervalo = setInterval(() => {
+    tiempoLimite--;
+    document.getElementById("reloj").textContent = `⏳ Tiempo restante: ${tiempoLimite} s`;
+    if (tiempoLimite <= 0) {
+      clearInterval(intervalo);
+      finalizarPorTiempo();
+    }
+  }, 1000);
+}
+
+function finalizarPorTiempo() {
+  document.getElementById("mensaje").textContent = "⏰ ¡Se acabó el tiempo!";
+  cartas.forEach(c => c.onclick = null);
+    clearInterval(intervalo);
+  const reloj = document.getElementById("reloj");
+  reloj.classList.add("temporizador-final");
+  document.getElementById("mensaje").textContent = "⏰ ¡Se acabó el tiempo!";
+  cartas.forEach(c => c.onclick = null);
+  localStorage.setItem("puntaje_memoria_sinonimos", aciertos);
+  document.getElementById("tiempo-acabado").play();
+  setTimeout(() => {
+    window.location.href = "../../puntajes.html";
+  }, 4000);
+  setTimeout(() => {
+    window.location.href = "../../puntajes.html";
+  }, 3000);
+}
+
     function reiniciar() {
       crearTablero();
+iniciarTemporizador();
     }
 
     crearTablero();
+iniciarTemporizador();
 
     window.onload = () => {
       document.getElementById("bg-music").volume = 0.1;
     };
-  </script>
+  
+</script>
 
     <nav class="tabbar">
         <a href="/main.html" class="tab"><img src = "/icons/home.svg"><br>Inicio</a>
@@ -208,7 +277,9 @@
         <a href="/index.html" class="tab" onclick="localStorage.clear()"><img src = "/icons/exit.svg"><br>Salir</a>
     </nav>
 
-  <script src = "/js/check_loggin.js"></script>
+  <script src = "/js/check_loggin.js">
+    </script>
 
+    
 </body>
 </html>
