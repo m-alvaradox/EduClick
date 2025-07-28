@@ -49,9 +49,18 @@
       <div id="puntajeSufijos" class="puntaje">-</div>
     </div>
     <div class="card">
+      <h4>🏛 Palabras Históricas - La Soga del Saber (Historia)</h4>
+      <div id="puntajeHistoriaSoga" class="puntaje">-</div>
+    </div>
+    <div class="card">
       <h4>🧪 Estados de la materia - Salta & Salta (Ciencias Naturales)</h4>
       <div class="puntaje" id="puntajeEstados"></div>
     </div>
+
+    <div class="card">
+  <h4>⚖️ Fuerzas - La Cuerda de la Fuerza (Física)</h4>
+  <div class="puntaje" id="puntajeFuerzasCuerda">-</div>
+</div>
   </div>
 
     <nav class="tabbar">
@@ -137,6 +146,21 @@ if (porcentajeSuf >= 70) {
   badgeSuf.classList.add("bajo");
 }
 
+const historia = parseInt(localStorage.getItem("puntaje_historia_soga")) || 0;
+const totalHistoria = 5;
+const porcentajeHistoria = Math.round((historia / totalHistoria) * 100);
+
+const badgeHistoria = document.getElementById("puntajeHistoriaSoga");
+badgeHistoria.innerText = `${historia} / ${totalHistoria}`;
+
+if (porcentajeHistoria >= 70) {
+  badgeHistoria.classList.add("alto");
+} else if (porcentajeHistoria >= 40) {
+  badgeHistoria.classList.add("medio");
+} else {
+  badgeHistoria.classList.add("bajo");
+}
+
 
 const estados = parseInt(localStorage.getItem("puntaje_estados")) || 0;
 const totalEstados = 5; // o el total que definas como ideal
@@ -151,6 +175,18 @@ if (porcentajeEstados >= 70) {
   badgeEstados.classList.add("medio");
 } else {
   badgeEstados.classList.add("bajo");
+}
+
+const fuerzaCuerda = parseInt(localStorage.getItem("puntaje_fuerzas_cuerda")) || 0;
+const badgeFuerza = document.getElementById("puntajeFuerzasCuerda");
+badgeFuerza.innerText = `${fuerzaCuerda} victorias`;
+
+if (fuerzaCuerda >= 5) {
+  badgeFuerza.classList.add("alto");
+} else if (fuerzaCuerda >= 2) {
+  badgeFuerza.classList.add("medio");
+} else {
+  badgeFuerza.classList.add("bajo");
 }
 
 

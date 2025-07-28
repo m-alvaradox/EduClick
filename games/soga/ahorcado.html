@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="/css/estilo_general.css">
+   <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+   <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16">
+   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+  <title>La Soga - Historia</title>
+  <style>
+    body {
+      font-family: 'Quicksand','Segoe UI', sans-serif;
+      background: url("/img/squid_background.jpg");
+      background-size: cover;
+      background-position: center;    
+      background-repeat: no-repeat;
+      text-align: center;
+      padding: 20px;
+    }
+    .game-container {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    #word {
+      font-size: 30px;
+      letter-spacing: 10px;
+      margin: 20px 0;
+    }
+    #letters button {
+      margin: 3px;
+      padding: 5px 10px;
+      font-size: 16px;
+    }
+    #message {
+      font-weight: bold;
+      color: green;
+    }
+    #canvas-container {
+      margin: 20px auto;
+      width: 200px;
+      height: 200px;
+    }
+    #timer {
+      font-weight: bold;
+      color: red;
+    }
+            audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>🪢 La Soga - Historia</h1>
+    <p id="pista">Pista: </p>
+    <div id="canvas-container">
+      <canvas id="hangman" width="200" height="200"></canvas>
+    </div>
+    <div id="word"></div>
+    <div id="letters"></div>
+    <p id="message"></p>
+    <p>Errores: <span id="errores">0</span>/6</p>
+    <p>⏱ Tiempo: <span id="timer">30</span> s</p>
+    <button onclick="startGame()">🔄 Reiniciar</button>
+  </div>
+
+      <audio id="bg-music" autoplay loop>
+    <source src="/audio/squidgame.MP3" type="audio/mp3">
+    Tu navegador no soporta música de fondo.
+  </audio>
+  <script>
+    const palabras = [
+      { palabra: "independencia", pista: "Proceso mediante el cual un país se libera del dominio de otro." },
+      { palabra: "revolucion", pista: "Cambio radical en la política o sociedad, como la Francesa o Industrial." },
+      { palabra: "colonizacion", pista: "Acción de establecer control sobre un territorio extranjero." },
+      { palabra: "imperio", pista: "Organización política que domina varios territorios y pueblos." },
+      { palabra: "constitucion", pista: "Conjunto de leyes fundamentales de un país." }
+    ];
+
+    let palabraActual = "";
+    let letrasAdivinadas = [];
+    let errores = 0;
+    let timer;
+    let timeLeft = 30;
+    let aciertos = 0;
+
+    const canvas = document.getElementById("hangman");
+    const ctx = canvas.getContext("2d");
+
+    function startGame() {
+      const seleccion = palabras[Math.floor(Math.random() * palabras.length)];
+      palabraActual = seleccion.palabra;
+      letrasAdivinadas = [];
+      errores = 0;
+      timeLeft = 30;
+
+      document.getElementById("pista").textContent = "Pista: " + seleccion.pista;
+      document.getElementById("errores").textContent = errores;
+      document.getElementById("message").textContent = "";
+      document.getElementById("timer").textContent = timeLeft;
+      clearInterval(timer);
+      timer = setInterval(updateTimer, 1000);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBase();
+      renderWord();
+      renderLetters();
+    }
+
+    function updateTimer() {
+      timeLeft--;
+      document.getElementById("timer").textContent = timeLeft;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        document.getElementById("message").textContent = "⏰ Tiempo agotado. Era: " + palabraActual;
+        document.getElementById("letters").innerHTML = "";
+        guardarPuntaje();
+      }
+    }
+
+    function renderWord() {
+      const display = palabraActual.split("").map(l => letrasAdivinadas.includes(l) ? l : "_").join(" ");
+      document.getElementById("word").textContent = display;
+      if (!display.includes("_")) {
+        clearInterval(timer);
+        aciertos++;
+        document.getElementById("message").textContent = "🎉 ¡Ganaste!";
+        document.getElementById("letters").innerHTML = "";
+        guardarPuntaje();
+      }
+    }
+
+    function renderLetters() {
+      const container = document.getElementById("letters");
+      container.innerHTML = "";
+      for (let i = 97; i <= 122; i++) {
+        const letra = String.fromCharCode(i);
+        const btn = document.createElement("button");
+        btn.textContent = letra;
+        btn.disabled = letrasAdivinadas.includes(letra);
+        btn.onclick = () => handleGuess(letra);
+        container.appendChild(btn);
+      }
+    }
+
+    function handleGuess(letra) {
+      letrasAdivinadas.push(letra);
+      if (!palabraActual.includes(letra)) {
+        errores++;
+        document.getElementById("errores").textContent = errores;
+        drawHangman(errores);
+        if (errores >= 6) {
+          clearInterval(timer);
+          document.getElementById("message").textContent = "💀 Perdiste. Era: " + palabraActual;
+          document.getElementById("letters").innerHTML = "";
+          guardarPuntaje();
+          return;
+        }
+      }
+      renderWord();
+      renderLetters();
+    }
+
+    function drawBase() {
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(10, 190);
+      ctx.lineTo(190, 190);
+      ctx.moveTo(50, 190);
+      ctx.lineTo(50, 20);
+      ctx.lineTo(120, 20);
+      ctx.lineTo(120, 40);
+      ctx.stroke();
+    }
+
+    function drawHangman(step) {
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      if (step === 1) {
+        ctx.arc(120, 55, 15, 0, Math.PI * 2);
+      } else if (step === 2) {
+        ctx.moveTo(120, 70);
+        ctx.lineTo(120, 120);
+      } else if (step === 3) {
+        ctx.moveTo(120, 80);
+        ctx.lineTo(100, 100);
+      } else if (step === 4) {
+        ctx.moveTo(120, 80);
+        ctx.lineTo(140, 100);
+      } else if (step === 5) {
+        ctx.moveTo(120, 120);
+        ctx.lineTo(100, 150);
+      } else if (step === 6) {
+        ctx.moveTo(120, 120);
+        ctx.lineTo(140, 150);
+      }
+      ctx.stroke();
+    }
+
+    function guardarPuntaje() {
+      let puntajeActual = parseInt(localStorage.getItem("puntaje_historia_soga")) || 0;
+      if (aciertos > puntajeActual) {
+        localStorage.setItem("puntaje_historia_soga", aciertos);
+      }
+    }
+
+    window.onload = () => {
+      startGame();
+      document.getElementById("bg-music").volume = 0.1;
+    };
+
+
+
+  </script>
+
+      <nav class="tabbar">
+        <a href="/main.html" class="tab"><img src = "/icons/home.svg"><br>Inicio</a>
+        <a href="/puntajes.html" class="tab"><img src = "/icons/win.svg"><br>Logros</a>
+        <a href="/jugar.html" class="tab"><img src = "/icons/videogame.svg"><br>Jugar</a>
+        <a href="/index.html" class="tab" onclick="localStorage.clear()"><img src = "/icons/exit.svg"><br>Salir</a>
+    </nav>
+
+  <script src = "/js/check_loggin.js"></script>
+  
+</body>
+</html>
