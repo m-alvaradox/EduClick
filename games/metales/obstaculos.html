@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/css/estilo_general.css">
+   <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+   <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16">
+   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+  <title>Choca y Gana</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f1f8e9;
+      font-family: sans-serif;
+      text-align: center;
+      font-family: 'Quicksand','Segoe UI', sans-serif;
+    }
+    canvas {
+      display: block;
+      margin: auto;
+      background: #e0f2f1;
+    }
+        audio {
+      display: none;
+    }
+
+    #puntaje, #tiempo {
+      font-weight: bold;
+      font-size: 1.5rem;
+      padding: 10px;
+    }
+    #tiempo {
+      color: #d32f2f;
+    }
+  </style>
+</head>
+<body>
+  <p>Evita los no metales y choca los metales para sumar puntos
+  <div id="puntaje">Puntaje: 0</div>
+  <div id="tiempo">Tiempo: 30s</div>
+  <canvas id="juego" width="480" height="640"></canvas>
+
+    <audio id="bg-music" autoplay loop>
+    <source src="/audio/playground_kids.mp3" type="audio/mp3">
+    Tu navegador no soporta música de fondo.
+  </audio>
+
+
+  <script>
+    const canvas = document.getElementById("juego");
+    const ctx = canvas.getContext("2d");
+
+    const elementos = [
+      { simbolo: "Na", tipo: "metal" },
+      { simbolo: "Cl", tipo: "no metal" },
+      { simbolo: "Fe", tipo: "metal" },
+      { simbolo: "O", tipo: "no metal" },
+      { simbolo: "Cu", tipo: "metal" },
+      { simbolo: "C", tipo: "no metal" },
+      { simbolo: "K", tipo: "metal" },
+      { simbolo: "S", tipo: "no metal" }
+    ];
+
+    const jugador = { x: 50, y: 300, ancho: 30, alto: 30, vy: 0 };
+    const gravedad = 0.4;
+    const salto = -8;
+    let obstaculos = [];
+    let frame = 0;
+    let puntaje = 0;
+    let tiempo = 30;
+    let juegoTerminado = false;
+
+    function crearObstaculo() {
+      const el = elementos[Math.floor(Math.random() * elementos.length)];
+      const y = Math.random() * (canvas.height - 40);
+      obstaculos.push({ x: canvas.width, y, ancho: 60, alto: 30, texto: el.simbolo, tipo: el.tipo, contado: false });
+    }
+
+    function dibujarJugador() {
+      ctx.fillStyle = "#f57f17";
+      ctx.fillRect(jugador.x, jugador.y, jugador.ancho, jugador.alto);
+    }
+
+    function dibujarObstaculos() {
+      ctx.font = "16px Arial";
+      ctx.textAlign = "center";
+      obstaculos.forEach(o => {
+        ctx.fillStyle = "#009688";
+        ctx.fillRect(o.x, o.y, o.ancho, o.alto);
+        ctx.fillStyle = "white";
+        ctx.fillText(o.texto, o.x + o.ancho / 2, o.y + 20);
+      });
+    }
+
+    function detectarColision(a, b) {
+      return (
+        a.x < b.x + b.ancho &&
+        a.x + a.ancho > b.x &&
+        a.y < b.y + b.alto &&
+        a.y + a.alto > b.y
+      );
+    }
+
+    function terminarJuego() {
+      juegoTerminado = true;
+      document.getElementById("puntaje").textContent = `❌ Juego Terminado — Puntaje: ${puntaje}`;
+    }
+
+    function actualizar() {
+      if (juegoTerminado) return;
+
+      frame++;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      jugador.vy += gravedad;
+      jugador.y += jugador.vy;
+
+      if (jugador.y + jugador.alto >= canvas.height) {
+        jugador.y = canvas.height - jugador.alto;
+        jugador.vy = 0;
+      } else if (jugador.y <= 0) {
+        jugador.y = 0;
+        jugador.vy = 0;
+      }
+
+      if (frame % 80 === 0) {
+        crearObstaculo();
+      }
+
+      obstaculos.forEach(o => o.x -= 4);
+
+      for (let o of obstaculos) {
+        if (detectarColision(jugador, o)) {
+          if (o.tipo === "metal" && !o.contado) {
+            puntaje++;
+            tiempo += 3;
+            o.contado = true;
+          } else if (o.tipo !== "metal") {
+            terminarJuego();
+          }
+        }
+      }
+
+      obstaculos = obstaculos.filter(o => o.x + o.ancho > 0);
+
+      dibujarJugador();
+      dibujarObstaculos();
+
+      if (!juegoTerminado) {
+        document.getElementById("puntaje").textContent = `Puntaje: ${puntaje}`;
+        requestAnimationFrame(actualizar);
+      }
+    }
+
+    function iniciarTemporizador() {
+      const intervalo = setInterval(() => {
+        if (juegoTerminado) {
+          clearInterval(intervalo);
+          return;
+        }
+        tiempo--;
+        document.getElementById("tiempo").textContent = `Tiempo: ${tiempo}s`;
+        if (tiempo <= 0) {
+          clearInterval(intervalo);
+          terminarJuego();
+        }
+      }, 1000);
+    }
+
+    window.addEventListener("keydown", e => {
+      if (e.code === "Space" && !juegoTerminado) {
+        jugador.vy = salto;
+      }
+    });
+
+    window.addEventListener("touchstart", () => {
+      if (!juegoTerminado) {
+        jugador.vy = salto;
+      }
+    });
+
+    iniciarTemporizador();
+    actualizar();
+
+          window.onload = () => {
+      document.getElementById("bg-music").volume = 0.1;
+    };
+
+  </script>
+
+      <nav class="tabbar">
+        <a href="/main.html" class="tab"><img src = "/icons/home.svg"><br>Inicio</a>
+        <a href="/puntajes.html" class="tab"><img src = "/icons/win.svg"><br>Logros</a>
+        <a href="/jugar.html" class="tab"><img src = "/icons/videogame.svg"><br>Jugar</a>
+        <a href="/index.html" class="tab" onclick="localStorage.clear()"><img src = "/icons/exit.svg"><br>Salir</a>
+    </nav>
+
+  <script src = "/js/check_loggin.js"></script>
+
+</body>
+</html>

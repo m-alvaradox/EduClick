@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/estilo_general.css">
+   <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+   <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16">
+   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+  <title>Juego de Prefijos</title>
+  <style>
+    body { font-family: 'Quicksand','Segoe UI', sans-serif;
+      background: #f0f4c3;
+      margin: 0; padding: 20px; text-align: center; transition: background 0.3s; }
+    h1 { color: #33691e; }
+    #question { font-size: 1.5rem; margin: 20px; }
+    .options { display: flex; flex-direction: column; gap: 10px; max-width: 300px; margin: 0 auto; }
+    .options button { padding: 15px; font-size: 1.2rem; border: none; background: #aed581; border-radius: 8px; cursor: pointer; transition: transform 0.2s; }
+    .options button:hover { background: #9ccc65; transform: scale(1.05); }
+    #status { margin-top: 20px; font-size: 1.2rem; }
+    #lives { font-size: 1.5rem; color: #d32f2f; }
+    #result { font-size: 1.3rem; margin-top: 30px; color: #33691e; }
+    #timer { font-size: 1.2rem; color: #33691e; margin-top: 10px; }
+        audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔤 Juego de Prefijos</h1>
+  <div id="question"></div>
+  <div class="options" id="options"></div>
+  <div id="timer">⏳ Tiempo: <span id="time">10</span>s</div>
+  <div id="status">Vidas: <span id="lives">❤️❤️❤️</span></div>
+  <div id="result"></div>
+  <audio id="audio-correcto" src="/audio/correct.mp3"></audio>
+  <audio id="audio-error" src="/audio/error.mp3"></audio>
+  <audio id="audio-timeout" src="/audio/timeout.mp3"></audio>
+
+  <audio id="bg-music" autoplay loop>
+    <source src="/audio/playground_kids.mp3" type="audio/mp3">
+    Tu navegador no soporta música de fondo.
+  </audio>
+
+<script>
+const preguntas = [
+  { base: "feliz", opciones: ["in", "re", "pre"], correcta: "in" },
+  { base: "cocinar", opciones: ["re", "in", "sub"], correcta: "re" },
+  { base: "acuerdo", opciones: ["des", "pre", "re"], correcta: "des" },
+  { base: "historia", opciones: ["pre", "sub", "in"], correcta: "pre" },
+  { base: "organizar", opciones: ["re", "anti", "pre"], correcta: "re" },
+  { base: "visible", opciones: ["in", "pos", "ex"], correcta: "in" },
+  { base: "tropical", opciones: ["sub", "super", "re"], correcta: "sub" },
+  { base: "valor", opciones: ["re", "in", "des"], correcta: "des" },
+  { base: "funcional", opciones: ["dis", "in", "sub"], correcta: "dis" },
+  { base: "orden", opciones: ["des", "pre", "anti"], correcta: "des" }
+];
+
+let indice = 0;
+let vidas = 3;
+let aciertos = 0;
+let timer;
+let timeLeft = 10;
+
+function reproducirSonido(id) {
+  document.getElementById(id).play();
+}
+
+function mostrarPregunta() {
+  resetTimer();
+  //document.body.style.background = "#f0f4c3";
+  const q = preguntas[indice];
+  document.getElementById("question").textContent = `¿Qué prefijo completa correctamente la palabra: ___${q.base}?`;
+  const opcionesDiv = document.getElementById("options");
+  opcionesDiv.innerHTML = "";
+  q.opciones.forEach(opcion => {
+    const btn = document.createElement("button");
+    btn.textContent = opcion + q.base;
+    btn.onclick = () => verificar(opcion);
+    opcionesDiv.appendChild(btn);
+  });
+  startTimer();
+}
+
+function startTimer() {
+  timeLeft = 10;
+  document.getElementById("time").textContent = timeLeft;
+  timer = setInterval(() => {
+    timeLeft--;
+    document.getElementById("time").textContent = timeLeft;
+    if (timeLeft === 0) {
+      clearInterval(timer);
+      reproducirSonido("audio-timeout");
+      perderVida(true);
+      siguientePregunta();
+    }
+  }, 1000);
+}
+
+function resetTimer() {
+  clearInterval(timer);
+  timeLeft = 10;
+  document.getElementById("time").textContent = timeLeft;
+}
+
+function verificar(respuesta) {
+  clearInterval(timer);
+  const correcta = preguntas[indice].correcta;
+  if (respuesta === correcta) {
+    aciertos++;
+    if (vidas < 3) vidas++;
+    document.body.style.background = "#c8e6c9";
+    reproducirSonido("audio-correcto");
+  } else {
+    document.body.style.background = "#ffcdd2";
+    reproducirSonido("audio-error");
+    perderVida();
+  }
+
+  actualizarVidas();
+  setTimeout(siguientePregunta, 500);
+}
+
+function perderVida(porTiempo = false) {
+  if (vidas > 0) vidas--;
+  actualizarVidas();
+  if (vidas === 0) finalizar();
+}
+
+function actualizarVidas() {
+  const heart = '❤️';
+  document.getElementById("lives").textContent = heart.repeat(vidas);
+}
+
+function siguientePregunta() {
+  indice++;
+  if (indice < preguntas.length && vidas > 0) {
+    mostrarPregunta();
+  } else {
+    finalizar();
+  }
+}
+
+function finalizar() {
+  resetTimer();
+  localStorage.setItem("puntaje_prefijos", aciertos);
+  alert(`Juego terminado. Tu puntaje final es: ${aciertos}`);
+  window.location.href = "/puntajes.html";
+}
+
+mostrarPregunta();
+
+    window.onload = () => {
+      document.getElementById("bg-music").volume = 0.1;
+    };
+
+
+</script>
+
+    <nav class="tabbar">
+        <a href="/main.html" class="tab"><img src = "/icons/home.svg"><br>Inicio</a>
+        <a href="/puntajes.html" class="tab"><img src = "/icons/win.svg"><br>Logros</a>
+        <a href="/jugar.html" class="tab"><img src = "/icons/videogame.svg"><br>Jugar</a>
+        <a href="/index.html" class="tab" onclick="localStorage.clear()"><img src = "/icons/exit.svg"><br>Salir</a>
+    </nav>
+
+  <script src = "/js/check_loggin.js"></script>
+</body>
+</html>

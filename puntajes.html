@@ -41,6 +41,10 @@
       <div class="puntaje" id="puntajeAnt"></div>
     </div>
     <div class="card">
+      <h4>🧠 Prefijos - Completa la palabra (Lengua y Literatura)</h4>
+      <div class="puntaje" id="puntajePrefijos">-</div>
+    </div>
+    <div class="card">
       <h4>🧪 Estados de la materia - Salta & Salta (Ciencias Naturales)</h4>
       <div class="puntaje" id="puntajeEstados"></div>
     </div>
@@ -98,6 +102,22 @@ if (porcentajeAnton >= 70) {
 } else {
   badgeAnton.classList.add("bajo");
 }
+
+const pref = parseInt(localStorage.getItem("puntaje_prefijos")) || 0;
+const totalPref = 10;
+const porcentajePref = Math.round((pref / totalPref) * 100);
+
+const badgePref = document.getElementById("puntajePrefijos");
+badgePref.innerText = `${pref} / ${totalPref}`;
+
+if (porcentajePref >= 70) {
+  badgePref.classList.add("alto");
+} else if (porcentajePref >= 40) {
+  badgePref.classList.add("medio");
+} else {
+  badgePref.classList.add("bajo");
+}
+
 
 const estados = parseInt(localStorage.getItem("puntaje_estados")) || 0;
 const totalEstados = 5; // o el total que definas como ideal
