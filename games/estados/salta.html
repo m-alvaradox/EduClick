@@ -92,13 +92,10 @@
   }
 
   function dibujarPersonaje() {
-    ctx.fillStyle = "#ffca28";
-    ctx.beginPath();
-    ctx.arc(personaje.x + 20, personaje.y + 15, 15, 0, Math.PI * 2); // cabeza
-    ctx.fill();
-    ctx.fillStyle = "#0288d1";
-    ctx.fillRect(personaje.x, personaje.y + 30, personaje.ancho, 30); // cuerpo
-  }
+      ctx.fillStyle = "#0288d1";
+  ctx.fillRect(personaje.x, personaje.y, personaje.ancho, personaje.alto);
+}
+  
 
   function dibujarObjetos() {
     ctx.font = "30px serif";
@@ -131,7 +128,7 @@
 
     objetos.forEach(obj => {
       obj.x -= 4;
-      if (!obj.tocado && detectarColision(personaje, obj)) {
+      if (!obj.tocado && detectarColision(personaje, obj) && personaje.y >= 300) {
         obj.tocado = true;
         if (obj.tipo === "líquido") {
           puntaje++;
