@@ -45,6 +45,10 @@
       <div class="puntaje" id="puntajePrefijos">-</div>
     </div>
     <div class="card">
+      <h4>🧩 Sufijos - Elige el correcto (Lengua y Literatura)</h4>
+      <div id="puntajeSufijos" class="puntaje">-</div>
+    </div>
+    <div class="card">
       <h4>🧪 Estados de la materia - Salta & Salta (Ciencias Naturales)</h4>
       <div class="puntaje" id="puntajeEstados"></div>
     </div>
@@ -116,6 +120,21 @@ if (porcentajePref >= 70) {
   badgePref.classList.add("medio");
 } else {
   badgePref.classList.add("bajo");
+}
+
+const suf = parseInt(localStorage.getItem("puntaje_sufijos")) || 0;
+const totalSuf = 10;
+const porcentajeSuf = Math.round((suf / totalSuf) * 100);
+
+const badgeSuf = document.getElementById("puntajeSufijos");
+badgeSuf.innerText = `${suf} / ${totalSuf}`;
+
+if (porcentajeSuf >= 70) {
+  badgeSuf.classList.add("alto");
+} else if (porcentajeSuf >= 40) {
+  badgeSuf.classList.add("medio");
+} else {
+  badgeSuf.classList.add("bajo");
 }
 
 

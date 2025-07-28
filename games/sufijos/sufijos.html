@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="stylesheet" href="/css/estilo_general.css">
+   <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+   <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16">
+   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+  <title>Juego de Sufijos</title>
+  <style>
+    body {
+      font-family: 'Quicksand','Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #e3f2fd, #bbdefb);
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+    h1 {
+      color: #0d47a1;
+      margin-bottom: 10px;
+    }
+    #contador {
+      font-weight: bold;
+      color: #1565c0;
+      margin-bottom: 20px;
+    }
+    #question {
+      font-size: 1.4rem;
+      margin: 20px 0;
+      color: #1a237e;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+    .options button {
+      padding: 15px;
+      font-size: 1.2rem;
+      border: none;
+      background: #ffffff;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .options button:hover {
+      background: #e3f2fd;
+      transform: scale(1.03);
+    }
+    .correct { background: #c8e6c9 !important; border-color: #388e3c !important; }
+    .incorrect { background: #ffcdd2 !important; border-color: #d32f2f !important; }
+    #score {
+      margin-top: 30px;
+      font-size: 1.2rem;
+      color: #0d47a1;
+    }
+
+            audio {
+      display: none;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>🧩 Juego de Sufijos</h1>
+  <div id="contador"></div>
+  <div id="question"></div>
+  <div class="options" id="options"></div>
+  <div id="score">Puntaje: <span id="puntos">0</span></div>
+
+    <audio id="audio-correcto" src="/audio/correct.mp3"></audio>
+  <audio id="audio-error" src="/audio/error.mp3"></audio>
+
+    <audio id="bg-music" autoplay loop>
+    <source src="/audio/playground_kids.mp3" type="audio/mp3">
+    Tu navegador no soporta música de fondo.
+  </audio>
+
+<script>
+const preguntas = [
+  { base: "flor", opciones: ["al", "oso", "ista"], correcta: "al" },
+  { base: "música", opciones: ["al", "ero", "oso"], correcta: "al" },
+  { base: "color", opciones: ["ista", "ido", "al"], correcta: "ido" },
+  { base: "humor", opciones: ["ismo", "al", "ero"], correcta: "ismo" },
+  { base: "persona", opciones: ["al", "aje", "lidad"], correcta: "al" },
+  { base: "familia", opciones: ["oso", "ar", "rizar"], correcta: "ar" },
+  { base: "piedra", opciones: ["al", "oso", "ista"], correcta: "al" },
+  { base: "idea", opciones: ["lidad", "oso", "ero"], correcta: "lidad" },
+  { base: "miedo", opciones: ["iento", "ista", "izar"], correcta: "iento" },
+  { base: "sistema", opciones: ["ático", "oso", "al"], correcta: "ático" }
+];
+
+let actual = 0;
+let puntos = 0;
+
+function reproducirSonido(id) {
+  document.getElementById(id).play();
+}
+
+function mostrarPregunta() {
+  const q = preguntas[actual];
+  document.getElementById("contador").textContent = `Pregunta ${actual + 1} de ${preguntas.length}`;
+  document.getElementById("question").textContent = `¿Qué sufijo forma una palabra correcta con "${q.base}"?`;
+  const opcionesDiv = document.getElementById("options");
+  opcionesDiv.innerHTML = "";
+  q.opciones.forEach(sufijo => {
+    const btn = document.createElement("button");
+    btn.innerHTML = `<strong>${q.base}</strong>-<span style='color:#1976d2;'>${sufijo}</span>`;
+    btn.onclick = () => verificar(btn, sufijo);
+    opcionesDiv.appendChild(btn);
+  });
+}
+
+function verificar(btn, sufijo) {
+  const correcta = preguntas[actual].correcta;
+  const opciones = document.querySelectorAll(".options button");
+  opciones.forEach(b => b.disabled = true);
+  if (sufijo === correcta) {
+    puntos++;
+    btn.classList.add("correct");
+    reproducirSonido("audio-correcto");
+  } else {
+    btn.classList.add("incorrect");
+    reproducirSonido("audio-error");
+    opciones.forEach(b => {
+      if (b.textContent.replace(/[^a-záéíóúñ]/gi, '') === preguntas[actual].base + correcta) {
+        b.classList.add("correct");
+      }
+    });
+  }
+  document.getElementById("puntos").textContent = puntos;
+  setTimeout(() => {
+    actual++;
+    if (actual < preguntas.length) {
+      mostrarPregunta();
+    } else {
+      finalizar();
+    }
+  }, 1000);
+}
+
+function finalizar() {
+  localStorage.setItem("puntaje_sufijos", puntos);
+  alert(`Juego terminado. Tu puntaje final es: ${puntos} de ${preguntas.length}`);
+  window.location.href = "/puntajes.html";
+}
+
+mostrarPregunta();
+
+    window.onload = () => {
+      document.getElementById("bg-music").volume = 0.1;
+    };
+
+</script>
+
+    <nav class="tabbar">
+        <a href="/main.html" class="tab"><img src = "/icons/home.svg"><br>Inicio</a>
+        <a href="/puntajes.html" class="tab"><img src = "/icons/win.svg"><br>Logros</a>
+        <a href="/jugar.html" class="tab"><img src = "/icons/videogame.svg"><br>Jugar</a>
+        <a href="/index.html" class="tab" onclick="localStorage.clear()"><img src = "/icons/exit.svg"><br>Salir</a>
+    </nav>
+
+  <script src = "/js/check_loggin.js"></script>
+
+</body>
+</html>
