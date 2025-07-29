@@ -33,6 +33,10 @@
       <div id="puntajeProb" class="puntaje">-</div>
     </div>
     <div class="card">
+      <h4>🔵 Técnicas de Conteo - La Hora de la Verdad (Matemáticas)</h4>
+      <div id="puntajeCont" class="puntaje">-</div>
+    </div>
+    <div class="card">
       <h4>📖 Sinónimos - Memoria Brillante (Lengua y Literatura)</h4>
       <div id= "puntajesin" class="puntaje">-</div>
     </div>
@@ -84,6 +88,21 @@
     badge.classList.add("medio");
   } else {
     badge.classList.add("bajo");
+  }
+
+  const puntaje_conteo = parseInt(localStorage.getItem("puntaje_conteo")) || 0;
+  const total_conteo = 6;
+  const porcentaje_conteo = Math.round((puntaje_conteo / total_conteo) * 100);
+
+  const badgeCont = document.getElementById("puntajeCont");
+  badgeCont.innerText = `${puntaje_conteo} / ${total_conteo}`;
+
+  if (porcentaje_conteo >= 70) {
+    badgeCont.classList.add("alto");
+  } else if (porcentaje_conteo >= 40) {
+    badgeCont.classList.add("medio");
+  } else {
+    badgeCont.classList.add("bajo");
   }
 
   const sin = parseInt(localStorage.getItem("puntaje_memoria_sinonimos")) || 0;

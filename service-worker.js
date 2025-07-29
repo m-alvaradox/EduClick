@@ -29,6 +29,7 @@ self.addEventListener("install", event => {
         "/games/sufijos/sufijos.html",
         "/games/sinonimos/memoria.html",
         "/games/probabilidades/index.html",
+        "/games/conteo/index.html",
         "/icons/exit.svg",
         "/icons/home.svg",
         "/icons/videogame.svg",

@@ -18,7 +18,7 @@
     body {
       margin: 0;
       font-family: 'Quicksand','Segoe UI', sans-serif;
-      background: url("/img/probabilidades.jpg");
+      background: url("/img/conteo.webp");
       background-size: cover;
       background-position: center;    
       background-repeat: no-repeat;
@@ -121,34 +121,34 @@
   <script>
     const preguntas = [
       {
-        texto: "¿Cuál es la probabilidad de obtener un número par al lanzar un dado?",
-        opciones: ["1/2", "1/3", "2/3", "1/6"],
-        respuesta: "1/2"
+        texto: "¿De cuántas formas distintas se pueden ordenar las letras de la palabra “SOL”?",
+        opciones: ["6", "3", "9", "12"],
+        respuesta: "6"
       },
       {
-        texto: "¿Cuántos resultados posibles hay al lanzar dos monedas?",
-        opciones: ["2", "3", "4", "6"],
-        respuesta: "4"
+        texto: "¿Cuántas maneras hay de elegir 2 personas de un grupo de 5?",
+        opciones: ["25", "30", "10", "5"],
+        respuesta: "10"
       },
       {
-        texto: "Si se elige una persona al azar de un grupo donde 40% son estudiantes, 30% profesores y 30% administrativos, ¿cuál es la probabilidad de que no sea estudiante?",
-        opciones: ["0.3", "0.6", "0.7", "0.4"],
-        respuesta: "0.6"
+        texto: "Un estudiante tiene 4 camisetas y 3 pantalones. ¿Cuántos conjuntos distintos puede formar?",
+        opciones: ["7", "12", "10", "4"],
+        respuesta: "12"
       },
       {
-        texto: "En una clase hay 10 estudiantes: 4 hombres y 6 mujeres. Si se elige uno al azar, ¿cuál es la probabilidad de que sea mujer?",
-        opciones: ["3/5", "4/10", "6/10", "2/3"],
-        respuesta: "6/10"
+        texto: "¿De cuántas formas se pueden sentar 4 estudiantes en una fila de 4 puestos?",
+        opciones: ["16", "8", "24", "12"],
+        respuesta: "24"
       },
       {
-        texto: "Se lanza un dado dos veces. ¿Cuál es la probabilidad de obtener un 6 en ambos lanzamientos?",
-        opciones: ["1/6", "1/36", "1/12", "1/3"],
-        respuesta: "1/36"
+        texto: "¿Cuántas combinaciones de 2 letras se pueden hacer con A, B, C, D si no importa el orden y no se repiten?",
+        opciones: ["6", "12", "4", "8"],
+        respuesta: "6"
       },
       {
-        texto: "En una caja hay 3 bolas rojas, 2 verdes y 5 azules. ¿Cuál es la probabilidad de sacar una bola roja o verde?",
-        opciones: ["3/10", "2/5", "1/2", "1/10"],
-        respuesta: "2/5"
+        texto: "¿Cuántas palabras distintas se pueden formar con las letras de la palabra “MAMA”? (sin repetir letras idénticas)",
+        opciones: ["12", "6", "24", "8"],
+        respuesta: "12"
       }
     ];
 
@@ -187,7 +187,7 @@
 
     function finalizarPorTiempo() {
       alert("⏰ ¡Se acabó el tiempo! Tu puntaje final es: " + puntaje);
-      localStorage.setItem("puntaje_probabilidades", puntaje);
+      localStorage.setItem("puntaje_conteo", puntaje);
       window.location.href = "../../puntajes.html";
     }
 
@@ -212,7 +212,7 @@
         mostrarPregunta();
       } else {
         alert("¡Has completado el quiz! Tu puntaje es: " + puntaje);
-        localStorage.setItem("puntaje_probabilidades", puntaje);
+        localStorage.setItem("puntaje_conteo", puntaje);
         window.location.href = "../../puntajes.html";
       }
     }
