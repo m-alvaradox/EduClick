@@ -37,13 +37,6 @@ Tecnologías Utilizadas
 - **Diseño responsivo** para tablets y móviles
 
 ---
-
-🚀 Cómo Probar EduClick
-
-1. Entra a esta dirección: https://educlick-5c8a3.web.app/
-2. Usuario: estudiante
-3. Contraseña: demo
-
 ### Login
 <img width="1234" height="556" alt="image" src="https://github.com/user-attachments/assets/f0381a14-213a-44b1-bfbc-39b8436d0232" />
 
